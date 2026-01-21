@@ -3,12 +3,11 @@ package com.samtech_.spring_eshop_demo.service.impl;
 import com.samtech_.spring_eshop_demo.dto.CategoryDTO;
 import com.samtech_.spring_eshop_demo.entity.CategoryEntity;
 import com.samtech_.spring_eshop_demo.mapper.CategoryMapper;
-import com.samtech_.spring_eshop_demo.repositary.CategoryRepositary;
+import com.samtech_.spring_eshop_demo.repositary.CategoryRepository;
 import com.samtech_.spring_eshop_demo.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class CategoryServiceImpl implements CategoryService {
     private String datasource;
 
     @Autowired
-    private CategoryRepositary categoryRepositary;
+    private CategoryRepository categoryRepository;
 
     @Override
     public CategoryDTO save(final CategoryDTO dto) {
@@ -35,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         log.debug("CategoryDTO received: {}", dto);
         final CategoryEntity mappedEntity = CategoryMapper.map(dto);
-        final CategoryEntity savedEntity = categoryRepositary.save(mappedEntity);
+        final CategoryEntity savedEntity = categoryRepository.save(mappedEntity);
         log.info("Category saved with ID: {} at data-source: {}",savedEntity.getId(),this.datasource);
 
         return CategoryMapper.map(savedEntity);
@@ -45,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryDTO> getCategories() {
         log.info("Fetching category data..");
 
-        final List<CategoryDTO> list = categoryRepositary
+        final List<CategoryDTO> list = categoryRepository
                 .findAll()
                 .stream()
                 .map(CategoryMapper::map)
